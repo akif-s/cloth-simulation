@@ -29,7 +29,7 @@ func (c *Constraint) update() {
 
 	dist := math.Sqrt(dx*dx + dy*dy)
 	diff := (c.len - dist)
-	percent := diff / dist / 2
+	percent := diff / dist / 4
 
 	offsetX := dx * percent
 	offsetY := dy * percent

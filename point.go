@@ -9,11 +9,12 @@ type Point struct {
 	px, py   float64
 	color    color.NRGBA
 	isPinned bool
+	isActive bool
 }
 
 //var deltaTime float64 = 0.4
 
-func NewPoint(x, y float64, color color.NRGBA, isPinned bool) *Point {
+func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 	p := &Point{
 		x:        x,
 		y:        y,
@@ -21,6 +22,7 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned bool) *Point {
 		py:       y,
 		color:    color,
 		isPinned: isPinned,
+		isActive: isActive,
 	}
 
 	return p

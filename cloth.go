@@ -32,7 +32,7 @@ func newCloth(X, Y, w, h, gap int, drawPoints bool) *Cloth {
 			if y == 0 && (x == 0 || (x+1)%5 == 0) {
 				pin = true
 			}
-			points = append(points, NewPoint(float64(x*gap+X), float64(y*gap+Y), color.NRGBA{R: 0, G: 0, B: 0, A: 0xff}, pin))
+			points = append(points, NewPoint(float64(x*gap+X), float64(y*gap+Y), color.NRGBA{R: 0, G: 0, B: 0, A: 0xff}, pin, true))
 		}
 	}
 
@@ -76,16 +76,18 @@ func (cloth *Cloth) draw(gtx layout.Context, dt float64) {
 
 	}
 	for _, c := range cloth.constraints {
-		var path clip.Path
-		path.Begin(gtx.Ops)
-		path.MoveTo(f32.Pt(float32(c.p1.x), float32(c.p1.y)))
-		path.LineTo(f32.Pt(float32(c.p2.x), float32(c.p2.y)))
-		path.Close()
+		if c.p1.isActive && c.p2.isActive {
+			var path clip.Path
+			path.Begin(gtx.Ops)
+			path.MoveTo(f32.Pt(float32(c.p1.x), float32(c.p1.y)))
+			path.LineTo(f32.Pt(float32(c.p2.x), float32(c.p2.y)))
+			path.Close()
 
-		a := clip.Stroke{Path: path.End(), Width: 1.8}.Op().Push(gtx.Ops)
-		paint.ColorOp{Color: c.color}.Add(gtx.Ops)
-		paint.PaintOp{}.Add(gtx.Ops)
-		a.Pop()
-		c.update()
+			a := clip.Stroke{Path: path.End(), Width: 1.8}.Op().Push(gtx.Ops)
+			paint.ColorOp{Color: c.color}.Add(gtx.Ops)
+			paint.PaintOp{}.Add(gtx.Ops)
+			a.Pop()
+			c.update()
+		}
 	}
 }
