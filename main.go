@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"time"
 
 	"gioui.org/app"
 	"gioui.org/io/system"
@@ -31,17 +32,24 @@ func main() {
 	app.Main()
 }
 
+var initTime = time.Now()
+
 func loop(w *app.Window) error {
 	var ops op.Ops
 
-	cloth := newCloth(100, 100, 19, 10, 20, false)
+	cloth := newCloth(250, 100, 50, 20, 30, false)
 
 	for e := range w.Events() {
 		switch e := e.(type) {
 		case system.FrameEvent:
 			gtx := layout.NewContext(&ops, e)
 
-			cloth.draw(gtx)
+			dt := time.Since(initTime)
+			initTime = time.Now()
+
+			//fmt.Println(dt.Seconds())
+
+			cloth.draw(gtx, dt.Seconds()*10)
 
 			op.InvalidateOp{}.Add(gtx.Ops)
 			e.Frame(gtx.Ops)

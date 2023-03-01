@@ -25,6 +25,7 @@ func newCloth(X, Y, w, h, gap int, drawPoints bool) *Cloth {
 	var points []*Point
 	var constraints []*Constraint
 
+	// Create the points
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
 			var pin bool
@@ -35,6 +36,7 @@ func newCloth(X, Y, w, h, gap int, drawPoints bool) *Cloth {
 		}
 	}
 
+	// Creat the constraintse
 	for i := 0; i < h; i++ { // y-axis
 		for j := 0; j < w; j++ { // x-axis
 			count := j + i*w
@@ -61,7 +63,7 @@ func newCloth(X, Y, w, h, gap int, drawPoints bool) *Cloth {
 	}
 }
 
-func (cloth *Cloth) draw(gtx layout.Context) {
+func (cloth *Cloth) draw(gtx layout.Context, dt float64) {
 
 	for _, p := range cloth.points {
 		if cloth.drawPoints { // Don't draw the points if not wanted.
@@ -70,7 +72,7 @@ func (cloth *Cloth) draw(gtx layout.Context) {
 			paint.PaintOp{}.Add(gtx.Ops)
 			a.Pop()
 		}
-		p.update()
+		p.update(dt)
 
 	}
 	for _, c := range cloth.constraints {
@@ -80,7 +82,7 @@ func (cloth *Cloth) draw(gtx layout.Context) {
 		path.LineTo(f32.Pt(float32(c.p2.x), float32(c.p2.y)))
 		path.Close()
 
-		a := clip.Stroke{Path: path.End(), Width: 1}.Op().Push(gtx.Ops)
+		a := clip.Stroke{Path: path.End(), Width: 1.8}.Op().Push(gtx.Ops)
 		paint.ColorOp{Color: c.color}.Add(gtx.Ops)
 		paint.PaintOp{}.Add(gtx.Ops)
 		a.Pop()

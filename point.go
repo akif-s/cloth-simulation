@@ -1,6 +1,8 @@
 package main
 
-import "image/color"
+import (
+	"image/color"
+)
 
 type Point struct {
 	x, y     float64
@@ -9,7 +11,7 @@ type Point struct {
 	isPinned bool
 }
 
-var deltaTime float64 = 0.1
+//var deltaTime float64 = 0.4
 
 func NewPoint(x, y float64, color color.NRGBA, isPinned bool) *Point {
 	p := &Point{
@@ -24,15 +26,15 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned bool) *Point {
 	return p
 }
 
-func (p *Point) update() {
+func (p *Point) update(dt float64) {
 	accX := 0
 	accY := 1
 
 	tmpx, tmpy := p.x, p.y
 
 	if !p.isPinned {
-		p.x = 2*p.x - p.px + float64(accX)*deltaTime*deltaTime
-		p.y = 2*p.y - p.py + float64(accY)*deltaTime*deltaTime
+		p.x = 2*p.x - p.px + float64(accX)*dt*dt
+		p.y = 2*p.y - p.py + float64(accY)*dt*dt
 	}
 
 	p.px = tmpx
