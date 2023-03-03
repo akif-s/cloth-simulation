@@ -28,15 +28,19 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 	return p
 }
 
+var oldDt float64 = 0.000001
+
 func (p *Point) update(dt float64) {
-	accX := 0
-	accY := 1
+	accX := 0.
+	accY := 1.2
 
 	tmpx, tmpy := p.x, p.y
 
 	if !p.isPinned {
-		p.x = 2*p.x - p.px + float64(accX)*dt*dt
-		p.y = 2*p.y - p.py + float64(accY)*dt*dt
+
+		p.x = p.x + (p.x-p.px)*(dt/oldDt) + float64(accX)*(dt+oldDt)/2*dt
+		p.y = p.y + (p.y-p.py)*(dt/oldDt) + float64(accY)*(dt+oldDt)/2*dt
+		oldDt = dt
 	}
 
 	p.px = tmpx

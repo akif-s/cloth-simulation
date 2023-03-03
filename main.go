@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"gioui.org/app"
+	"gioui.org/io/key"
 	"gioui.org/io/pointer"
 	"gioui.org/io/system"
 	"gioui.org/layout"
@@ -41,9 +42,11 @@ func loop(w *app.Window) error {
 	var ops op.Ops
 
 	cX := 80
-	cY := 20
-	cGap := 5
+	cY := 25
+	cGap := 10
 	cloth := newCloth(WINDOW_WIDTH-cX/2*cGap, 100, cX, cY, cGap, false)
+
+	var keyTag struct{}
 
 	for e := range w.Events() {
 		switch e := e.(type) {
@@ -55,7 +58,23 @@ func loop(w *app.Window) error {
 
 			//fmt.Println(dt.Seconds() * 10)
 
-			// Pointer Events
+			//Keyboard Inputs
+			key.InputOp{
+				Tag:  &keyTag,
+				Keys: key.NameEscape,
+			}.Add(gtx.Ops)
+
+			for _, ev := range gtx.Queue.Events(&keyTag) {
+				if e, ok := ev.(key.Event); ok {
+					if e.State == key.Press {
+						if e.Name == key.NameEscape {
+							w.Perform(system.ActionClose)
+						}
+					}
+				}
+			}
+
+			// Pointer Inputs
 			pointer.InputOp{
 				Tag:   w,
 				Types: pointer.Drag,
@@ -83,7 +102,7 @@ func loop(w *app.Window) error {
 
 							dst := math.Sqrt(dx*dx + dy*dy)
 
-							if dst <= 40 {
+							if dst <= 20 {
 								p.isActive = false
 							}
 						}
