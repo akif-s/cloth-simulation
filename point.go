@@ -5,8 +5,8 @@ import (
 )
 
 type Point struct {
-	x, y     float64
-	px, py   float64
+	pos      Vector2
+	pPos     Vector2
 	color    color.NRGBA
 	isPinned bool
 	isActive bool
@@ -16,10 +16,8 @@ type Point struct {
 
 func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 	p := &Point{
-		x:        x,
-		y:        y,
-		px:       x,
-		py:       y,
+		pos:      NewVector2(x, y),
+		pPos:     NewVector2(x, y),
 		color:    color,
 		isPinned: isPinned,
 		isActive: isActive,
@@ -31,18 +29,16 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 var oldDt float64 = 0.000001
 
 func (p *Point) update(dt float64) {
-	accX := 0.
-	accY := 1.2
+	acc := NewVector2(0, 1.3)
 
-	tmpx, tmpy := p.x, p.y
+	tmpPos := p.pos
 
 	if !p.isPinned {
 
-		p.x = p.x + (p.x-p.px)*(dt/oldDt) + float64(accX)*(dt+oldDt)/2*dt
-		p.y = p.y + (p.y-p.py)*(dt/oldDt) + float64(accY)*(dt+oldDt)/2*dt
+		// p.x = p.x + (p.x-p.px)*(dt/oldDt) + float64(accX)*(dt+oldDt)/2*dt
+		p.pos = p.pos.Sum(p.pos.Substract(p.pPos).Product(dt / oldDt).Sum(acc.Product((dt + oldDt) / 2 * dt)))
 		oldDt = dt
 	}
 
-	p.px = tmpx
-	p.py = tmpy
+	p.pPos = tmpPos
 }

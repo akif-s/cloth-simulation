@@ -3,7 +3,6 @@ package main
 import (
 	"image"
 	"log"
-	"math"
 	"os"
 	"time"
 
@@ -42,7 +41,7 @@ func loop(w *app.Window) error {
 	var ops op.Ops
 
 	cX := 80
-	cY := 25
+	cY := 20
 	cGap := 10
 	cloth := newCloth(WINDOW_WIDTH-cX/2*cGap, 100, cX, cY, cGap, false)
 
@@ -95,12 +94,11 @@ func loop(w *app.Window) error {
 				case pointer.Event:
 					switch ev.Type {
 					case pointer.Drag:
-						mPos := ev.Position
+						mPos := NewVector2(float64(ev.Position.X), float64(ev.Position.Y))
 						for _, p := range cloth.points {
-							dx := p.x - float64(mPos.X)
-							dy := p.y - float64(mPos.Y)
+							dx := p.pos.Substract(mPos)
 
-							dst := math.Sqrt(dx*dx + dy*dy)
+							dst := dx.Magnitude()
 
 							if dst <= 20 {
 								p.isActive = false
@@ -111,7 +109,7 @@ func loop(w *app.Window) error {
 			}
 
 			//Draw Cloth
-			cloth.draw(gtx, dt.Seconds()*10)
+			cloth.draw(gtx, dt.Seconds()*15)
 
 			op.InvalidateOp{}.Add(gtx.Ops)
 			e.Frame(gtx.Ops)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"image/color"
-	"math"
 )
 
 type Constraint struct {
@@ -12,7 +11,10 @@ type Constraint struct {
 }
 
 func newConstraint(p1, p2 *Point, color color.NRGBA) *Constraint {
-	l := math.Sqrt(math.Pow(p1.x-p2.x, 2) + math.Pow(p1.y-p2.y, 2)) // len of the constraint
+
+	//l := math.Sqrt(math.Pow(p1.x-p2.x, 2) + math.Pow(p1.y-p2.y, 2)) // len of the constraint
+
+	l := p2.pos.Substract(p1.pos).Magnitude()
 
 	c := &Constraint{
 		p1:    p1,
@@ -24,23 +26,20 @@ func newConstraint(p1, p2 *Point, color color.NRGBA) *Constraint {
 }
 
 func (c *Constraint) update() {
-	dx := c.p1.x - c.p2.x
-	dy := c.p1.y - c.p2.y
 
-	dist := math.Sqrt(dx*dx + dy*dy)
+	dx := c.p1.pos.Substract(c.p2.pos) // dx and dy as vector
+
+	dist := dx.Magnitude()
 	diff := (c.len - dist)
 	percent := diff / dist / 2.4
 
-	offsetX := dx * percent
-	offsetY := dy * percent
+	offset := dx.Product(percent)
 
 	if !c.p1.isPinned {
-		c.p1.x += offsetX
-		c.p1.y += offsetY
+		c.p1.pos = c.p1.pos.Sum(offset)
 	}
 	if !c.p2.isPinned {
-		c.p2.x -= offsetX
-		c.p2.y -= offsetY
+		c.p2.pos = c.p2.pos.Substract(offset)
 	}
 
 }

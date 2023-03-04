@@ -71,7 +71,7 @@ func (cloth *Cloth) draw(gtx layout.Context, dt float64) {
 			continue
 		}
 		if cloth.drawPoints { // Don't draw the points if not wanted.
-			a := clip.Rect{Min: image.Pt(int(p.x), int(p.y)), Max: image.Pt(int(p.x)+5, int(p.y)+5)}.Push(gtx.Ops)
+			a := clip.Rect{Min: image.Pt(int(p.pos.x), int(p.pos.y)), Max: image.Pt(int(p.pos.x)+5, int(p.pos.y)+5)}.Push(gtx.Ops)
 			paint.ColorOp{Color: p.color}.Add(gtx.Ops)
 			paint.PaintOp{}.Add(gtx.Ops)
 			a.Pop()
@@ -87,8 +87,8 @@ func (cloth *Cloth) draw(gtx layout.Context, dt float64) {
 		if c.p1.isActive && c.p2.isActive {
 			var path clip.Path
 			path.Begin(gtx.Ops)
-			path.MoveTo(f32.Pt(float32(c.p1.x+2.5), float32(c.p1.y+2.5)))
-			path.LineTo(f32.Pt(float32(c.p2.x+2.5), float32(c.p2.y+2.5)))
+			path.MoveTo(f32.Pt(float32(c.p1.pos.x+2.5), float32(c.p1.pos.y+2.5)))
+			path.LineTo(f32.Pt(float32(c.p2.pos.x+2.5), float32(c.p2.pos.y+2.5)))
 			path.Close()
 
 			a := clip.Stroke{Path: path.End(), Width: 1}.Op().Push(gtx.Ops)
