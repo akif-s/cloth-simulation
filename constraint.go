@@ -27,13 +27,11 @@ func newConstraint(p1, p2 *Point, color color.NRGBA) *Constraint {
 
 func (c *Constraint) update() {
 
-	dx := c.p1.pos.Substract(c.p2.pos) // dx and dy as vector
+	d1 := c.p2.pos.Substract(c.p1.pos)
+	d2 := d1.Magnitude()
+	d3 := (d2 - c.len) / d2
 
-	dist := dx.Magnitude()
-	diff := (c.len - dist)
-	percent := diff / dist / 2.4
-
-	offset := dx.Product(percent)
+	offset := d1.Product(d3 / 3.15)
 
 	if !c.p1.isPinned {
 		c.p1.pos = c.p1.pos.Sum(offset)

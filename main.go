@@ -40,8 +40,8 @@ var initTime = time.Now()
 func loop(w *app.Window) error {
 	var ops op.Ops
 
-	cX := 80
-	cY := 20
+	cX := 50
+	cY := 30
 	cGap := 10
 	cloth := newCloth(WINDOW_WIDTH-cX/2*cGap, 100, cX, cY, cGap, false)
 

@@ -53,3 +53,7 @@ func (v Vector2) Magnitude() float64 {
 func (v Vector2) Normalize() Vector2 {
 	return v.Divide(v.Magnitude())
 }
+
+func (v Vector2) Abs() Vector2 {
+	return NewVector2(math.Abs(v.x), math.Abs(v.y))
+}

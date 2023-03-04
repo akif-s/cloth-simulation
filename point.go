@@ -29,7 +29,7 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 var oldDt float64 = 0.000001
 
 func (p *Point) update(dt float64) {
-	acc := NewVector2(0, 1.3)
+	acc := NewVector2(0, 0.8)
 
 	tmpPos := p.pos
 
