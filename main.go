@@ -40,12 +40,14 @@ var initTime = time.Now()
 func loop(w *app.Window) error {
 	var ops op.Ops
 
-	cX := 50
-	cY := 30
-	cGap := 10
+	cX := 70
+	cY := 25
+	cGap := 20
 	cloth := newCloth(WINDOW_WIDTH-cX/2*cGap, 100, cX, cY, cGap, false)
 
 	var keyTag struct{}
+
+	mouse := NewMouse(0, 0)
 
 	for e := range w.Events() {
 		switch e := e.(type) {
@@ -76,7 +78,7 @@ func loop(w *app.Window) error {
 			// Pointer Inputs
 			pointer.InputOp{
 				Tag:   w,
-				Types: pointer.Drag,
+				Types: pointer.Drag | pointer.Move | pointer.Type(pointer.ButtonPrimary) | pointer.Release,
 				ScrollBounds: image.Rectangle{
 					Min: image.Point{
 						X: 0,
@@ -89,21 +91,32 @@ func loop(w *app.Window) error {
 				},
 			}.Add(gtx.Ops)
 
+			// Pointer events
 			for _, ev := range gtx.Queue.Events(w) {
 				switch ev := ev.(type) {
 				case pointer.Event:
 					switch ev.Type {
+					case pointer.Move:
+						mouse.SetPosition(NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
+					case pointer.Press:
+						mouse.SetPress(true)
 					case pointer.Drag:
-						mPos := NewVector2(float64(ev.Position.X), float64(ev.Position.Y))
-						for _, p := range cloth.points {
-							dx := p.pos.Substract(mPos)
+						mouse.SetPosition(NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
+						mouse.SetDragg(true)
+					case pointer.Release:
+						mouse.SetPress(false)
+						mouse.SetDragg(false)
+					}
+				}
+			}
+			if mouse.isPress || mouse.isDragg {
+				for _, p := range cloth.points {
+					dx := p.pos.Substract(mouse.pos)
 
-							dst := dx.Magnitude()
+					dst := dx.Magnitude()
 
-							if dst <= 20 {
-								p.isActive = false
-							}
-						}
+					if dst <= 20 {
+						p.isActive = false
 					}
 				}
 			}

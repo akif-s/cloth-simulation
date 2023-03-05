@@ -31,7 +31,16 @@ func (c *Constraint) update() {
 	d2 := d1.Magnitude()
 	d3 := (d2 - c.len) / d2
 
-	offset := d1.Product(d3 / 3.15)
+	offset := d1.Product(d3 / 2.5)
+
+	/* d := c.p2.pos.Substract(c.p1.pos)
+	dist := d.Magnitude()
+
+	diff := (c.len - dist) / dist
+
+	mul := diff * 0.35 * (1 - c.len/dist)
+
+	offset := d.Product(mul) */
 
 	if !c.p1.isPinned {
 		c.p1.pos = c.p1.pos.Sum(offset)

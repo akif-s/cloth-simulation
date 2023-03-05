@@ -29,7 +29,7 @@ func newCloth(X, Y, w, h, gap int, drawPoints bool) *Cloth {
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
 			var pin bool
-			if y == 0 && (x == 0 || (x+1)%4 == 0) {
+			if y == 0 && (x == 0 || (x+1)%7 == 0) {
 				pin = true
 			}
 			points = append(points, NewPoint(float64(x*gap+X), float64(y*gap+Y), color.NRGBA{R: 0, G: 0, B: 0, A: 0xff}, pin, true))
