@@ -2,12 +2,14 @@ package main
 
 import (
 	"image/color"
+
+	"github.com/akif-s/vector"
 )
 
 type Point struct {
-	pos      Vector2
-	vel      Vector2
-	pPos     Vector2
+	pos      vector.Vector2
+	vel      vector.Vector2
+	pPos     vector.Vector2
 	color    color.NRGBA
 	isPinned bool
 	isActive bool
@@ -17,8 +19,8 @@ type Point struct {
 
 func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 	p := &Point{
-		pos:      NewVector2(x, y),
-		pPos:     NewVector2(x, y),
+		pos:      vector.NewVector2(x, y),
+		pPos:     vector.NewVector2(x, y),
 		color:    color,
 		isPinned: isPinned,
 		isActive: isActive,
@@ -28,7 +30,7 @@ func NewPoint(x, y float64, color color.NRGBA, isPinned, isActive bool) *Point {
 }
 
 func (p *Point) update(dt float64) {
-	acc := NewVector2(0, .8)
+	acc := vector.NewVector2(0, .8)
 
 	tmpPos := p.pos
 
@@ -36,14 +38,14 @@ func (p *Point) update(dt float64) {
 
 		p.vel = p.vel.Sum(acc)
 
-		if p.pos.y >= WINDOW_HEIGHT*2 {
-			p.pos.y = WINDOW_HEIGHT * 2
+		if p.pos.Y >= WINDOW_HEIGHT*2 {
+			p.pos.Y = WINDOW_HEIGHT * 2
 		} else {
 			// Verlet Integration
 			p.pos = p.pos.Sum(p.pos.Substract(p.pPos).Product(0.99)).Sum(acc.Product(dt * dt))
 		}
 
-		p.vel.x, p.vel.y = 0.0, 0.0
+		p.vel.X, p.vel.Y = 0.0, 0.0
 
 	}
 

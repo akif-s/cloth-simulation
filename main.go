@@ -13,6 +13,8 @@ import (
 	"gioui.org/layout"
 	"gioui.org/op"
 	"gioui.org/unit"
+
+	"github.com/akif-s/vector"
 )
 
 const (
@@ -97,11 +99,11 @@ func loop(w *app.Window) error {
 				case pointer.Event:
 					switch ev.Type {
 					case pointer.Move:
-						mouse.SetPosition(NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
+						mouse.SetPosition(vector.NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
 					case pointer.Press:
 						mouse.SetPress(true)
 					case pointer.Drag:
-						mouse.SetPosition(NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
+						mouse.SetPosition(vector.NewVector2(float64(ev.Position.X), float64(ev.Position.Y)))
 						mouse.SetDragg(true)
 					case pointer.Release:
 						mouse.SetPress(false)

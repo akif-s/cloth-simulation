@@ -1,18 +1,20 @@
 package main
 
+import "github.com/akif-s/vector"
+
 type Mouse struct {
-	pos     Vector2
+	pos     vector.Vector2
 	isPress bool
 	isDragg bool
 }
 
 func NewMouse(x, y float64) *Mouse {
 	return &Mouse{
-		pos: NewVector2(x, y),
+		pos: vector.NewVector2(x, y),
 	}
 }
 
-func (m *Mouse) SetPosition(pos Vector2) {
+func (m *Mouse) SetPosition(pos vector.Vector2) {
 	m.pos = pos
 }
 

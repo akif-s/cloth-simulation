@@ -7,6 +7,7 @@ require gioui.org v0.0.0-20230224004350-5f818bc5e7f9
 require (
 	gioui.org/cpu v0.0.0-20210817075930-8d6a761490d2 // indirect
 	gioui.org/shader v1.0.6 // indirect
+	github.com/akif-s/vector v0.0.0-20230311152116-77b94bc9fb25 // indirect
 	github.com/benoitkugler/textlayout v0.3.0 // indirect
 	github.com/go-text/typesetting v0.0.0-20221214153724-0399769901d5 // indirect
 	golang.org/x/exp v0.0.0-20221012211006-4de253d81b95 // indirect
